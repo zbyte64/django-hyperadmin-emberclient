@@ -8,5 +8,5 @@ class EmberJSClient(SimpleTemplateClient):
     def __init__(self, *args, **kwargs):
         super(EmberJSClient, self).__init__(*args, **kwargs)
         if hasattr(self.api_endpoint, 'register_media_type'):
-            self.api_endpoint.register_media_type(CollectionEmberClientJSON, 'application/vnd.Collection.hyperadmin.emberclient+JSON')
+            self.api_endpoint.register_media_type('application/vnd.Collection.hyperadmin.emberclient+JSON', CollectionEmberClientJSON)
 

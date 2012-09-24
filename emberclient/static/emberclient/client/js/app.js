@@ -25,7 +25,7 @@ jQuery(function($) {
 });
 
 var App = Em.Application.create({});
-App.contentType = 'application/vnd.Collection.hyperadmin+JSON';
+App.contentType = 'application/vnd.Collection.hyperadmin.emberclient+JSON';
 
 App.ApplicationController = Ember.Controller.extend();
 
