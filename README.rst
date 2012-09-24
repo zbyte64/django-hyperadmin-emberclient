@@ -25,13 +25,7 @@ Installation
 
 Put 'emberclient' into your ``INSTALLED_APPS`` section of your settings file.
 
-And the following to urls.py::
+Add to your root url patterns::
 
-    import hyperadmin
-    from emberclient.clients import EmberJSClient
-    admin_client = EmberJSClient(api_endpoint=hyperadmin.site)
-
-Add to root url patterns::
-
-    url(r'^emberjs-admin/', include(admin_client.urls)),
+    url(r'^emberjs-admin/', include('emberclient.urls')),
 
