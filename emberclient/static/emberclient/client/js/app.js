@@ -77,6 +77,9 @@ App.Field = App.CommonObject.extend({
   isSelect: function() {
     return this.get('type') == 'select';
   }.property('type'),
+  isList: function() {
+    return this.get('type') == 'list';
+  }.property('type'),
   isChecked: function() {
     if (this.get('type') != 'checkbox') {
       return false;
@@ -86,7 +89,7 @@ App.Field = App.CommonObject.extend({
 })
 App.Template = App.Link.extend({
   fields: function() {
-    var fields = Array();
+    var fields = Em.ArrayController.create({'content':Array()})
     var data = this.get('data');
     if (data) {
       for (var i=0; i<data.length; i++) {
@@ -113,7 +116,7 @@ App.makeControllerProperty = function(controller_class, item_class, key) {
         }
         return data;
     }
-    return function_controller.property('data.@each.'+key).cacheable()
+    return function_controller.property('data.'+key).cacheable()
 }
 App.makeSimpleProperty = function(key, item_class) {
     attr_property = function() {
