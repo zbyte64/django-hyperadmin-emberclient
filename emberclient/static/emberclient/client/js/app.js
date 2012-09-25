@@ -111,7 +111,6 @@ App.makeControllerProperty = function(controller_class, item_class, key) {
             var item = item_class.create(item_data);
             data.pushObject(item);
         }
-        console.log(data, key)
         return data;
     }
     return function_controller.property('data.@each.'+key).cacheable()
@@ -237,20 +236,19 @@ App.initUploadFile = function(field, options) {
         var templates = collection.get('templates')
         for(var index=0; index<templates.get('length'); index++) {
             template = templates.objectAt(index)
-            console.log(template, template.get('rel'))
             if (template.get('rel') == 'direct-upload') {
                 
                 var rows = template.get('data')
                 for(var j=0; j<rows.length; j++) {
                     var row = rows[j]
-                    console.log(data.formData, row)
                     if (row['type'] != 'file') {
                         data.formData[row['name']] = row['value'];
                     } else {
                         data.fileInput.attr('name', row['name']);
                     }
                 }
-                
+                data.url = template.get('href');
+                console.log("Sending file", data, data.formData)
                 data.submit()
                 return true;
             }
