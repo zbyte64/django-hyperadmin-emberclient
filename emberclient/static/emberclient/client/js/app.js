@@ -111,9 +111,10 @@ App.makeControllerProperty = function(controller_class, item_class, key) {
             var item = item_class.create(item_data);
             data.pushObject(item);
         }
+        console.log(data, key)
         return data;
     }
-    return function_controller.property('data.'+key).cacheable()
+    return function_controller.property('data.@each.'+key).cacheable()
 }
 App.makeSimpleProperty = function(key, item_class) {
     attr_property = function() {
@@ -186,7 +187,6 @@ App.CollectionController = Em.ObjectController.extend({
     }.property('data.namespaces').cacheable(),
     handleResponse: function(data) {
         this.set('data', data)
-        console.log(this, data)
     }
 })
 
@@ -218,6 +218,7 @@ App.uploadingFiles = false;
 App.initUploadFile = function(field, options) {
   console.log('upload init', field, options)
   var endpoint = field.attr('data-resource-url');
+  var upload_to = field.attr('data-upload-to') || '';
   
   function add(e, data) {
     console.log('upload add', e, data)
@@ -229,30 +230,50 @@ App.initUploadFile = function(field, options) {
     fileInput.after('<span class="uploadstatus">Uploading: '+file.name+'<span class="uploadprogress">&nbsp;</span></span>')
     fileInput.hide()
     
-    //TODO this is only necessary because forms insist on resaving and "upload to" is not communicated
-    /*
+    function startUpload(collection_data, textStatus, jqXHR) {
+        data.formData = {};
+        collection = App.CollectionController.create({})
+        collection.set('data', collection_data['collection'])
+        var templates = collection.get('templates')
+        for(var index=0; index<templates.get('length'); index++) {
+            template = templates.objectAt(index)
+            console.log(template, template.get('rel'))
+            if (template.get('rel') == 'direct-upload') {
+                
+                var rows = template.get('data')
+                for(var j=0; j<rows.length; j++) {
+                    var row = rows[j]
+                    console.log(data.formData, row)
+                    if (row['type'] != 'file') {
+                        data.formData[row['name']] = row['value'];
+                    } else {
+                        data.fileInput.attr('name', row['name']);
+                    }
+                }
+                
+                data.submit()
+                return true;
+            }
+        }
+        return false;
+    }
+    
     if (endpoint) {
         /* file uploads require a single ajax request to get an upload slot
-         * this is the first request to get a signed url *
-        $.ajax({
-            type : 'POST',
-            //async : false,
-            dataType: 'json',
-            url : determine_name_url,
-            beforeSend : add_csrf,
-            data : {filename: file.name,
-                       upload_to: upload_to},
-            success : function(post_data) {
-                data.formData = post_data;
-                data.fileInput.attr('name', options.fileObjName);
-                file.path = post_data['targetpath'];
-                data.submit();
-            }
-        });
+         * this is the first request to get a signed url */
+        var settings = $.extend({}, App.requestDefaults, {
+            type: 'POST',
+            url: endpoint,
+            success: startUpload,
+            data : {'name': file.name,
+                    'upload_to': upload_to},
+        })
+        $.ajax(settings);
+    } else {
+        console.log('boo')
+        data.formData = {'name':'hyperadmin-tmp/'+file.name}
+        data.submit()
     }
-    */
-    data.formData = {'name':'hyperadmin-tmp/'+file.name}
-    data.submit()
   }
   function progress(e, data) {
     console.log('upload progress', e, data)
