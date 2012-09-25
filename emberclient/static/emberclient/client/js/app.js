@@ -342,6 +342,7 @@ App.initUploadFile = function(field, options) {
         //'uploadLimit': 1,
         'async': true,
         'type': 'POST',
+        'forceIframeTransport': true,
         'url': '/hyper-admin/-storages/media/add/',
         'paramName': 'upload',
         'accepts': {
