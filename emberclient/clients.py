@@ -3,6 +3,7 @@ from hyperadmin.clients.common import SimpleTemplateClient
 from emberclient.mediatypes import CollectionEmberClientJSON
 
 class EmberJSClient(SimpleTemplateClient):
+    default_namespace = 'emberjsclient'
     template_name = 'emberclient/index.html'
     
     def __init__(self, *args, **kwargs):
