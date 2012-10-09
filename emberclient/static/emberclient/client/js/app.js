@@ -248,6 +248,7 @@ App.initUploadFile = function(field, options) {
                         data.formData[row['name']] = row['value'];
                     } else {
                         data.fileInput.attr('name', row['name']);
+                        data.paramName = [row['name']];
                     }
                 }
                 data.url = template.get('href');
