@@ -284,6 +284,7 @@ App.initUploadFile = function(field, options) {
   }
   function fail(e, data) {
     console.log('upload fail', e, data)
+    remove_click()
   }
   function done(e, data) {
     console.log('upload done', e, data)
