@@ -287,12 +287,20 @@ App.initUploadFile = function(field, options) {
     console.log('upload fail', e, data)
     remove_click()
   }
-  function done(e, data) {
-    console.log('upload done', e, data)
+  function done(e, raw_data) {
+    console.log('upload done', e, raw_data)
+    
+    var data = null;
+    if (raw_data.dataType == 'iframe text') {
+      data = $.parseJSON(raw_data.result);
+    } else {
+      data = $.parseJSON($(raw_data.result).text());
+    }
+    console.log(data)
     var fileInput = $(e.target);
-    var fields = $.parseJSON(data.result).collection.items[0]['data']
+    var fields = data.collection.items[0]['data']
     var path = null;
-    var file = data.files[0]
+    var file = raw_data.files[0]
     console.log(fields)
     for(var i=0; i<fields.length; i++) {
       var field = fields[i];
@@ -344,6 +352,7 @@ App.initUploadFile = function(field, options) {
         //'uploadLimit': 1,
         'async': true,
         'type': 'POST',
+        'dataType': 'text', //since we use iframe, we force as text then parse as json later
         'forceIframeTransport': true,
         'url': '/hyper-admin/-storages/media/add/',
         'paramName': 'upload',
