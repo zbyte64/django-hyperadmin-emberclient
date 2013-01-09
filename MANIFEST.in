@@ -1,0 +1,2 @@
+recursive-include emberclient/templates *
+recursive-include emberclient/static *

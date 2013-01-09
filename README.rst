@@ -7,8 +7,10 @@ django-hyperadmin-emberclient is a hyper admin client powered by emberjs.
 --------
 Features
 --------
-Defines it's own media type: application/vnd.Collection.hyperadmin.emberclient+JSON
 
+* Supports CRUD operations
+* Defines it's own media type: application/vnd.Collection.hyperadmin.emberclient+JSON
+* Direct upload functionality (in progress)
 
 ------------
 Requirements
